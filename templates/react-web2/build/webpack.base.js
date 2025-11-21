@@ -23,7 +23,16 @@ module.exports = {
       {
         test: /\.[jt]sx?$/,
         exclude: /node_modules/,
-        use: 'ts-loader',
+        use: {
+          loader: 'swc-loader',
+          options: {
+            jsc: {
+              parser: { syntax: 'typescript', tsx: true },
+              transform: { react: { runtime: 'automatic' } },
+              target: 'es2020'
+            }
+          }
+        }
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
