@@ -1,10 +1,9 @@
 # Node and editor junk
 node_modules
-template/**/*/node_modules
 dist
-template/**/*/dist
 .DS_Store
 *.log
+pnpm-lock.yaml
 
 # Build outputs
 coverage

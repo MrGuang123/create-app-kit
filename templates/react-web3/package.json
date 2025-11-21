@@ -9,12 +9,15 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.10",
+    "@walletconnect/ethereum-provider": "^2.23.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "viem": "^2.39.3",
     "wagmi": "^3.0.1"
   },
   "devDependencies": {
+    "@swc/core": "^1.15.3",
+    "@swc/helpers": "^0.5.17",
     "@types/react": "^19.2.6",
     "@types/react-dom": "^19.2.3",
     "css-loader": "^7.1.2",
@@ -22,8 +25,8 @@
     "html-webpack-plugin": "^5.6.0",
     "mini-css-extract-plugin": "^2.9.0",
     "style-loader": "^4.0.0",
+    "swc-loader": "^0.2.6",
     "terser-webpack-plugin": "^5.3.10",
-    "ts-loader": "^9.5.1",
     "typescript": "^5.5.4",
     "webpack": "^5.92.1",
     "webpack-cli": "^5.1.4",
