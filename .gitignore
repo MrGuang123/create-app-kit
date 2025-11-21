@@ -1,0 +1,16 @@
+# Node and editor junk
+node_modules
+template/**/*/node_modules
+dist
+template/**/*/dist
+.DS_Store
+*.log
+
+# Build outputs
+coverage
+.cache
+
+# Local env
+.env
+.env.*
+

@@ -1,0 +1,26 @@
+{
+  "name": "create-app-kit",
+  "version": "0.1.0",
+  "description": "CLI to scaffold React + TypeScript front-end templates.",
+  "bin": {
+    "create-app-kit": "bin/create-app-kit.js"
+  },
+  "files": [
+    "bin",
+    "templates"
+  ],
+  "type": "commonjs",
+  "scripts": {
+    "list": "node bin/create-app-kit.js --list",
+    "local": "node bin/create-app-kit.js demo-app --template react-web2 --force"
+  },
+  "dependencies": {
+    "commander": "^12.0.0",
+    "fs-extra": "^11.2.0",
+    "prompts": "^2.4.2"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,4 @@
+{
+  "title": "React Web3 模板",
+  "description": "React 19 + wagmi + viem + React Query 的 Web3 前端模板，含钱包连接与网络切换示例。"
+}
