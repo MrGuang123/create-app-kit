@@ -1,3 +1,4 @@
+@import "tailwindcss";
 :root {
   font-family: 'Inter', 'DM Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
   color: #e9edf7;

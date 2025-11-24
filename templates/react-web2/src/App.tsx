@@ -36,7 +36,9 @@ const App = () => {
     <div className="page">
       <div className="gradient gradient-1" />
       <div className="gradient gradient-2" />
-
+      <h1 className="text-3xl font-bold text-green-700 underline">
+        Hello world!
+      </h1>
       <main className="container">
         <header className="card hero">
           <p className="pill">Create App Kit · React 19 · Web2</p>
