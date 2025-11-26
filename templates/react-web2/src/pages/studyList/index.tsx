@@ -1,12 +1,21 @@
+import { useState, memo } from "react";
 import { useStudyStore } from "../../stores/studyStore";
 
-const StudyList = () => {
+const StudyList = memo(() => {
   const courses = useStudyStore((s) => s.courses);
   const updateProgress = useStudyStore(
     (s) => s.updateProgress
   );
+  const [count, setCount] = useState(0);
+
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <button
+        onClick={() => setCount((c) => c + 1)}
+        className="mb-4 px-4 py-2 bg-blue-500 rounded"
+      >
+        Force Re-render ({count})
+      </button>
       {courses.map((course) => (
         <div
           key={course.title}
@@ -50,6 +59,8 @@ const StudyList = () => {
       ))}
     </div>
   );
-};
+});
+
+StudyList.whyDidYouRender = true;
 
 export default StudyList;
