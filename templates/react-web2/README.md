@@ -25,3 +25,7 @@ npm run build
 - `build/webpack.*.js`：基础/开发/生产三套配置，若需注入环境变量可在 base 配置中添加 DefinePlugin。
 
 > 建议在 hooks 中封装接口请求（fetch/axios），配合状态库或数据缓存库（如 React Query/SWR）进一步管理请求状态；需要路由时可添加 `react-router` 并在 `src/pages` 组织页面。
+
+## 安装
+
+pnpm install> 注意：首次安装时 Cypress 会自动下载二进制文件（约 300MB），如果网络问题导致失败，请手动运行 `npx cypress install`。
