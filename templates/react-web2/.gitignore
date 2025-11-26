@@ -1,0 +1,17 @@
+# Node and editor junk
+node_modules
+dist
+.DS_Store
+*.log
+
+# Build outputs
+coverage
+.cache
+
+# Local env
+.env
+.env.*
+
+# Source Maps（不要提交到 Git）
+*.map
+sourcemaps/
