@@ -1,6 +1,12 @@
 import { useState, memo } from "react";
 import { useStudyStore } from "../../stores/studyStore";
 import { useCourses } from "@/services/useCourses";
+import { Button } from "@/shadcn/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/shadcn/ui/dialog";
 
 const StudyList = memo(() => {
   const {
@@ -26,6 +32,14 @@ const StudyList = memo(() => {
       >
         Force Re-render ({count}) {subTitle}
       </button>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button>打开弹窗</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <p>弹窗内容</p>
+        </DialogContent>
+      </Dialog>
       {courses.map((course) => (
         <div
           key={course.title}
