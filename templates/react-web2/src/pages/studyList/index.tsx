@@ -1,12 +1,22 @@
 import { useState, memo } from "react";
 import { useStudyStore } from "../../stores/studyStore";
+import { useCourses } from "@/services/useCourses";
 
 const StudyList = memo(() => {
-  const courses = useStudyStore((s) => s.courses);
+  const {
+    data: courses = [],
+    isLoading,
+    error,
+  } = useCourses();
+  // const courses = useStudyStore((s) => s.courses);
+  const subTitle = useStudyStore((s) => s.subTitle);
   const updateProgress = useStudyStore(
     (s) => s.updateProgress
   );
   const [count, setCount] = useState(0);
+
+  if (isLoading) return <div>加载中...</div>;
+  if (error) return <div>加载失败</div>;
 
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -14,7 +24,7 @@ const StudyList = memo(() => {
         onClick={() => setCount((c) => c + 1)}
         className="mb-4 px-4 py-2 bg-blue-500 rounded"
       >
-        Force Re-render ({count})
+        Force Re-render ({count}) {subTitle}
       </button>
       {courses.map((course) => (
         <div

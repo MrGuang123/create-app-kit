@@ -1,50 +1,17 @@
 import { createStore } from "@/utils/createStore";
 import { createJSONStorage } from "zustand/middleware";
+import { Course } from "@/services/api/courses";
 
-type Course = {
-  id: string;
-  title: string;
-  level: string;
-  progress: number;
-  tag: string;
+type StudyState = {
+  courses: Course[];
+  loading: boolean;
+  subTitle: string;
 };
-type StudyState = { courses: Course[]; loading: boolean };
 type StudyActions = {
   addCourse: (course: Course) => void;
   updateProgress: (id: string, delta: number) => void;
   reset: () => void;
 };
-
-const seed: Course[] = [
-  {
-    id: "modern-js",
-    title: "Modern JS Patterns",
-    level: "中级",
-    progress: 72,
-    tag: "前端",
-  },
-  {
-    id: "system-design",
-    title: "System Design Primer",
-    level: "高级",
-    progress: 40,
-    tag: "架构",
-  },
-  {
-    id: "ts-deep-dive",
-    title: "TypeScript Deep Dive",
-    level: "中级",
-    progress: 85,
-    tag: "语言",
-  },
-  {
-    id: "ui-ux",
-    title: "UI/UX Essentials",
-    level: "初级",
-    progress: 55,
-    tag: "设计",
-  },
-];
 
 // set(fn, shouldReplace, actionName)
 export const useStudyStore = createStore<
@@ -52,8 +19,9 @@ export const useStudyStore = createStore<
   StudyActions
 >(
   (set) => ({
-    courses: seed,
+    courses: [],
     loading: false,
+    subTitle: "学习中心",
     addCourse: (course) =>
       set(
         (state) => {
@@ -82,7 +50,7 @@ export const useStudyStore = createStore<
     reset: () =>
       set(
         (state) => {
-          state.courses = seed;
+          state.courses = [];
           state.loading = false;
         },
         false,
