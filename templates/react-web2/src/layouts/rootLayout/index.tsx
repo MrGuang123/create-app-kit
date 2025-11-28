@@ -4,6 +4,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { BookOpen, Sparkles } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   Sidebar,
   SidebarContent,
@@ -19,6 +20,7 @@ import {
   SidebarTrigger,
 } from "@/shadcn/ui/sidebar";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const menu = [
   { label: "学习列表", to: "/list", icon: BookOpen },
@@ -27,6 +29,7 @@ const menu = [
 
 const RootLayout = () => {
   const { pathname } = useLocation();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -34,13 +37,15 @@ const RootLayout = () => {
       <Sidebar>
         <SidebarHeader className="border-b border-sidebar-border p-4">
           <h1 className="text-lg font-semibold">
-            学习中心
+            {t("sidebar.title")}
           </h1>
         </SidebarHeader>
 
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>导航菜单</SidebarGroupLabel>
+            <SidebarGroupLabel>
+              {t("sidebar.navMenu")}
+            </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {menu.map((item) => {
@@ -66,7 +71,7 @@ const RootLayout = () => {
 
         <SidebarFooter className="border-t border-sidebar-border p-4">
           <p className="text-xs text-muted-foreground">
-            © 2024 学习中心
+            {t("sidebar.copyright")}
           </p>
         </SidebarFooter>
       </Sidebar>
@@ -77,8 +82,9 @@ const RootLayout = () => {
           <SidebarTrigger />
           <h2 className="font-semibold">
             {menu.find((m) => m.to === pathname)?.label ||
-              "首页"}
+              t("nav.home")}
           </h2>
+          <LanguageSwitcher />
           <ThemeToggle />
         </header>
 

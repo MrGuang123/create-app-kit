@@ -1,0 +1,23 @@
+/**
+ * 应用全局背景
+ * - 亮色模式：浅灰渐变
+ * - 暗色模式：深色渐变 + 光晕效果
+ */
+export function AppBackground() {
+  return (
+    <div
+      className="pointer-events-none fixed inset-0 z-0"
+      aria-hidden="true"
+    >
+      {/* 亮色背景 */}
+      <div className="absolute inset-0 bg-linear-to-br from-slate-50 via-white to-blue-50 dark:hidden" />
+
+      {/* 暗色背景 */}
+      <div className="absolute inset-0 hidden bg-linear-to-br from-slate-900 via-slate-950 to-indigo-950 dark:block" />
+
+      {/* 光晕效果 - 仅暗色模式 */}
+      <div className="absolute left-1/2 top-0 hidden h-96 w-96 -translate-x-1/2 bg-cyan-500/20 blur-[120px] dark:block" />
+      <div className="absolute right-0 bottom-0 hidden h-80 w-80 bg-indigo-500/15 blur-[100px] dark:block" />
+    </div>
+  );
+}
