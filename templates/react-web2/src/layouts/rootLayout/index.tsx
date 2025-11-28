@@ -3,7 +3,7 @@ import {
   Outlet,
   useLocation,
 } from "react-router-dom";
-import { BookOpen, Sparkles } from "lucide-react";
+import { BookOpen, Sparkles, Terminal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
   Sidebar,
@@ -25,6 +25,11 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 const menu = [
   { label: "学习列表", to: "/list", icon: BookOpen },
   { label: "新功能", to: "/newFeature", icon: Sparkles },
+  {
+    label: "WebSocket 测试",
+    to: "/socketTest",
+    icon: Terminal,
+  },
 ];
 
 const RootLayout = () => {

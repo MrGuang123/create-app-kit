@@ -131,6 +131,39 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply text-foreground;
+    @apply text-foreground bg-background;
   }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* 亮色模式 */
+::-webkit-scrollbar-thumb {
+  /* border-radius: 4px; */
+  background: #94a3b8;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 4px;
+  background: #e2e8f0;
+}
+
+/* 暗色模式 */
+.dark ::-webkit-scrollbar-thumb {
+  background: #465481;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #5b6a9a;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #171d2e;
 }
