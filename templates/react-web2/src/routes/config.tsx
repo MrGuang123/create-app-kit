@@ -3,6 +3,7 @@ import RootLayout from "@/layouts/rootLayout";
 import StudyList from "@/pages/studyList";
 import NewFeature from "@/pages/newFeature";
 import SocketTest from "@/pages/socketTest";
+import NotFound from "@/pages/notFound";
 
 export const routeConfigs = [
   {
@@ -17,5 +18,9 @@ export const routeConfigs = [
       { path: "newFeature", element: <NewFeature /> },
       { path: "socketTest", element: <SocketTest /> },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ];

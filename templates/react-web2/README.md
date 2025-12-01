@@ -1,30 +1,81 @@
 # React Web2 模板
 
-- 技术栈：React 19 + TypeScript + Webpack 5。
-- 特色：面向 Web2 应用的通用模板，适配 REST/GraphQL 接口；提供示例 hook、目录分层，别名 `@` 指向 `src`，生产模式分包与 CSS 抽离。
+> 基于 React 19 + TypeScript + Webpack 5 的现代化前端脚手架
 
-## 开发
+## ✨ 特性
 
-```bash
-npm install
-npm run dev
+- ⚡ React 19 + TypeScript
+- 🎨 Tailwind CSS 4 + Shadcn UI
+- 📦 Zustand 状态管理
+- 🔄 React Query 数据请求
+- 🌍 i18next 国际化（中/英）
+- 🌓 暗色/亮色主题切换
+- 🔌 WebSocket 工具封装
+- ✅ Vitest 单元测试 + Cypress E2E 测试
+- 🔧 Biome 代码格式化 + Husky Git hooks
+
+## 📁 项目结构
+
+src/
+├── components/ # 通用组件
+├── constants/ # 常量定义
+├── hooks/ # 自定义 Hooks
+├── layouts/ # 布局组件
+├── locales/ # 国际化语言包
+├── pages/ # 页面组件
+├── providers/ # React Context Providers
+├── routes/ # 路由配置
+├── services/ # API 服务层
+├── shadcn/ # Shadcn UI 组件
+├── stores/ # Zustand 状态
+├── types/ # TypeScript 类型定义
+└── utils/ # 工具函数
+
+## 🚀 快速开始
+
+# 安装依赖
+
+pnpm install
+
+# 启动开发服务器
+
+pnpm dev
+
+# 构建生产版本
+
+pnpm build
+
+# 运行单元测试
+
+pnpm vitest
+
+# 运行 E2E 测试
+
+pnpm cy:open
+
+## 📖 开发指南
+
+### 添加新页面
+
+1. 在 `src/pages/` 创建页面目录
+2. 在 `src/routes/config.tsx` 添加路由配置
+3. （可选）在 `src/locales/` 添加翻译
+
+### 使用 WebSocket
+
+```
+import { useSocket } from "@/hooks/useSocket";
+
+function MyComponent() {
+  const { status, send, lastMessage } = useSocket({
+    url: "ws://localhost:8080",
+  });
+}
 ```
 
-## 构建
+### 添加国际化
 
-```bash
-npm run build
-```
-
-产物输出到 `dist/`。如需静态服务器可使用 `npx serve dist` 等工具。
-
-## 重要文件
-
-- `src/hooks/useHealthCheck.ts`：健康检查示例 hook，可替换成真实接口调用。
-- `src/App.tsx`：示例落地页，可移除示例卡片并改为业务页面。
-- `build/webpack.*.js`：基础/开发/生产三套配置，若需注入环境变量可在 base 配置中添加 DefinePlugin。
-
-> 建议在 hooks 中封装接口请求（fetch/axios），配合状态库或数据缓存库（如 React Query/SWR）进一步管理请求状态；需要路由时可添加 `react-router` 并在 `src/pages` 组织页面。
+在 `src/locales/zh-CN/common.ts` 和 `src/locales/en-US/common.ts` 中添加翻译键值。
 
 ## 安装
 

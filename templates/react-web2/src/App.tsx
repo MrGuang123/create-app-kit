@@ -1,9 +1,12 @@
+import { Suspense } from "react";
 import AppRoutes from "@/routes";
 import { QueryProvider } from "@/providers/queryProvider";
 import { SidebarProvider } from "@/shadcn/ui/sidebar";
 import { useTheme } from "@/hooks/useTheme";
 import { useLanguage } from "@/hooks/useLanguage";
 import { AppBackground } from "@/components/AppBackground";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { Loading } from "@/components/Loading";
 
 const App = () => {
   // 初始化主题和语言
@@ -12,12 +15,16 @@ const App = () => {
   // useLanguage();
 
   return (
-    <QueryProvider>
-      <AppBackground />
-      <SidebarProvider className="relative z-10">
-        <AppRoutes />
-      </SidebarProvider>
-    </QueryProvider>
+    <ErrorBoundary>
+      <Suspense fallback={<Loading />}>
+        <QueryProvider>
+          <AppBackground />
+          <SidebarProvider className="relative z-10">
+            <AppRoutes />
+          </SidebarProvider>
+        </QueryProvider>
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 
