@@ -1,4 +1,20 @@
 {
   "title": "React Web2 模板",
-  "description": "React 19 + TypeScript + Webpack 的 Web2 通用模板，适配 REST/GraphQL 接口。"
+  "description": "React 19 + TypeScript + Webpack 的 Web2 通用模板，适配 REST/GraphQL 接口。",
+  "features": {
+    "linter": {
+      "prompt": "选择代码规范工具：",
+      "choices": [
+        {
+          "title": "Biome (更快，all-in-one)",
+          "value": "biome"
+        },
+        {
+          "title": "ESLint + Prettier (传统方案)",
+          "value": "eslint"
+        }
+      ],
+      "default": "biome"
+    }
+  }
 }

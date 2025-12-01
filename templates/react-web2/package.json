@@ -40,7 +40,6 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.7",
     "@soda/friendly-errors-webpack-plugin": "^1.8.1",
     "@svgr/webpack": "^8.1.0",
     "@swc/core": "^1.15.3",
@@ -80,12 +79,6 @@
     "webpack-dev-server": "^5.0.4",
     "webpack-merge": "^6.0.1",
     "webpackbar": "^7.0.0"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "biome check --apply",
-      "biome format --write"
-    ]
   },
   "license": "MIT"
 }
