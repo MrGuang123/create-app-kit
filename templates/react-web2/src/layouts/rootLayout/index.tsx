@@ -3,7 +3,12 @@ import {
   Outlet,
   useLocation,
 } from "react-router-dom";
-import { BookOpen, Sparkles, Terminal } from "lucide-react";
+import {
+  BookOpen,
+  Sparkles,
+  Terminal,
+  Cpu,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
   Sidebar,
@@ -29,6 +34,11 @@ const menu = [
     label: "WebSocket 测试",
     to: "/socketTest",
     icon: Terminal,
+  },
+  {
+    label: "Web Worker",
+    to: "/workerDemo",
+    icon: Cpu,
   },
 ];
 

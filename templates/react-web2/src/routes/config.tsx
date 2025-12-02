@@ -3,6 +3,7 @@ import RootLayout from "@/layouts/rootLayout";
 import StudyList from "@/pages/studyList";
 import NewFeature from "@/pages/newFeature";
 import SocketTest from "@/pages/socketTest";
+import WorkerDemo from "@/pages/workerDemo";
 import NotFound from "@/pages/notFound";
 
 export const routeConfigs = [
@@ -17,6 +18,7 @@ export const routeConfigs = [
       { path: "list", element: <StudyList /> },
       { path: "newFeature", element: <NewFeature /> },
       { path: "socketTest", element: <SocketTest /> },
+      { path: "workerDemo", element: <WorkerDemo /> },
     ],
   },
   {
