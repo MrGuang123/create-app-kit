@@ -19,3 +19,7 @@ sourcemaps
 .env
 .env.*
 
+# Rust WASM
+wasm/target
+src/wasm/pkg
+*.wasm

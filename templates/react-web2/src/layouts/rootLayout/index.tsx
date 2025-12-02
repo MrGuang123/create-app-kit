@@ -8,6 +8,7 @@ import {
   Sparkles,
   Terminal,
   Cpu,
+  Zap,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
@@ -39,6 +40,11 @@ const menu = [
     label: "Web Worker",
     to: "/workerDemo",
     icon: Cpu,
+  },
+  {
+    label: "WebAssembly",
+    to: "/wasmDemo",
+    icon: Zap,
   },
 ];
 

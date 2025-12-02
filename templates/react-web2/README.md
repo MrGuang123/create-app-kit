@@ -91,3 +91,22 @@ E2E 测试（少量，慢，贵）- 完整用户流程
 工具函数、自定义 Hooks、Store/状态管理、业务逻辑函数（涉及计算、规则）、复杂交互组件（表单、模态框等）
 不建议测试内容：
 样式/CSS、第三方库行为、简单的 UI 展示组件、路由跳转
+
+## webassembly
+
+### 1. 全局安装 rust 和 wasm-pack（只需一次）
+
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+cargo install wasm-pack
+
+### 2. 进入项目目录
+
+cd projectName
+
+### 3. 编译 Rust WASM（会自动下载 Cargo.toml 中的依赖）
+
+pnpm wasm:build
+
+### 4. 启动开发服务器
+
+pnpm dev

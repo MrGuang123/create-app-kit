@@ -7,6 +7,8 @@
     "dev": "webpack serve --config build/webpack.development.js --env development",
     "build": "webpack --config build/webpack.production.js",
     "build:analyze": "ANALYZE=true webpack --config build/webpack.production.js",
+    "wasm:build": "cd wasm && wasm-pack build --target web --out-dir ../src/wasm/pkg",
+    "wasm:build:dev": "cd wasm && wasm-pack build --target web --dev --out-dir ../src/wasm/pkg",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "test:e2e:ci": "start-server-and-test dev http://localhost:5173 cy:run",

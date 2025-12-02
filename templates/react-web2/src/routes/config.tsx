@@ -4,6 +4,7 @@ import StudyList from "@/pages/studyList";
 import NewFeature from "@/pages/newFeature";
 import SocketTest from "@/pages/socketTest";
 import WorkerDemo from "@/pages/workerDemo";
+import WasmDemo from "@/pages/wasmDemo";
 import NotFound from "@/pages/notFound";
 
 export const routeConfigs = [
@@ -19,6 +20,7 @@ export const routeConfigs = [
       { path: "newFeature", element: <NewFeature /> },
       { path: "socketTest", element: <SocketTest /> },
       { path: "workerDemo", element: <WorkerDemo /> },
+      { path: "wasmDemo", element: <WasmDemo /> },
     ],
   },
   {
