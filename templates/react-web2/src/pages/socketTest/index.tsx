@@ -47,7 +47,7 @@ function SocketPanel({
   onRemove?: () => void;
 }) {
   const [url, setUrl] = useState(
-    "wss://ws.postman-echo.com/raw"
+    __APP_ENV__.wsUrl || "wss://ws.postman-echo.com/raw"
   );
   const [message, setMessage] = useState(
     '{"type":"chat","msg":"hello"}'

@@ -5,8 +5,7 @@ import {
   useState,
 } from "react";
 
-// ============ 类型定义 ============
-
+// 类型定义
 type TaskType =
   | "fibonacci"
   | "primeCount"
@@ -34,32 +33,29 @@ interface PendingTask {
 }
 
 interface UseWorkerReturn {
-  /** Worker 是否就绪 */
+  // Worker 是否就绪
   isReady: boolean;
-  /** 是否正在执行任务 */
+  // 是否正在执行任务
   isLoading: boolean;
-  /** 待处理任务数量 */
+  // 待处理任务数量
   pendingCount: number;
-  /** 执行任务 */
+  // 执行任务
   execute: <T, R>(
     type: TaskType,
     payload: T
   ) => Promise<WorkerResult<R>>;
-  /** 终止 Worker */
+  // 终止 Worker
   terminate: () => void;
 }
 
-// ============ 生成唯一 ID ============
-
+// 生成唯一 ID
 let taskIdCounter = 0;
 const generateTaskId = () =>
   `task-${Date.now()}-${++taskIdCounter}`;
 
-// ============ Hook 实现 ============
-
+// Hook 实现
 /**
  * Web Worker Hook
- *
  * @example
  * ```tsx
  * const { isReady, isLoading, execute } = useWorker();
@@ -94,7 +90,10 @@ export function useWorker(): UseWorkerReturn {
         "../workers/compute.worker.ts",
         import.meta.url
       ),
-      { type: "module" }
+      {
+        type: "module",
+        name: "compute-worker",
+      }
     );
 
     // 消息处理

@@ -3,12 +3,15 @@ const { merge } = require("webpack-merge");
 const FriendlyErrorsWebpackPlugin = require("@soda/friendly-errors-webpack-plugin");
 const WebpackBar = require("webpackbar");
 const notifier = require("node-notifier");
-const baseConfig = require("./webpack.base");
+const getBaseConfig = require("./webpack.base");
+const { getConfig } = require("./config");
 const packageJson = require("../package.json");
 
-const devPort = 5173;
+// 获取开发环境配置
+const envConfig = getConfig("development");
+const devPort = envConfig.devPort;
 
-module.exports = merge(baseConfig, {
+module.exports = merge(getBaseConfig("development"), {
   mode: "development",
   devtool: "cheap-module-source-map",
   output: {

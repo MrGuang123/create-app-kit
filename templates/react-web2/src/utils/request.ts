@@ -2,9 +2,9 @@ import ky, { type Options } from "ky";
 import { matchMock } from "@/mocks";
 import { HttpMethod } from "@/types/request";
 
-// 手动控制是否开启mock
-let isMockEnabled = true;
-const baseUrl = "/api";
+// 从环境配置获取 mock 开关和 API 路径
+let isMockEnabled = __APP_ENV__.enableMock;
+const baseUrl = __APP_ENV__.apiPath;
 
 // 创建 ky 实例
 const kyInstance = ky.create({

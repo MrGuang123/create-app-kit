@@ -1,7 +1,13 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { routeConfigs } from './config';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import { routeConfigs } from "./config";
 
-const router = createBrowserRouter(routeConfigs);
+// 使用环境配置中的 baseName
+const router = createBrowserRouter(routeConfigs, {
+  basename: __APP_ENV__.baseName,
+});
 
 const AppRoutes = () => <RouterProvider router={router} />;
 

@@ -7,11 +7,13 @@ const CompressionPlugin = require("compression-webpack-plugin");
 const {
   BundleAnalyzerPlugin,
 } = require("webpack-bundle-analyzer");
-const baseConfig = require("./webpack.base");
+const WebpackBar = require("webpackbar");
+const getBaseConfig = require("./webpack.base");
+const packageJson = require("../package.json");
 
 const isAnalyze = process.env.ANALYZE === "true";
 
-module.exports = merge(baseConfig, {
+module.exports = merge(getBaseConfig("production"), {
   mode: "production",
 
   // 生产环境 source map（用于错误追踪，不暴露源码）
@@ -37,6 +39,12 @@ module.exports = merge(baseConfig, {
   },
 
   plugins: [
+    // 构建进度条
+    new WebpackBar({
+      name: packageJson.name,
+      color: "#36cfc9", // 生产用青色区分
+    }),
+
     // Source Map 输出到单独目录（dist 同级的 sourcemaps 目录）
     new webpack.SourceMapDevToolPlugin({
       filename: "../sourcemaps/[file].map",
