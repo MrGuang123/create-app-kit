@@ -3,89 +3,46 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ============ 亮色主题（默认） ============ */
+/*
+ * 主题变量初始值（作为 fallback）
+ * 实际主题颜色通过 JS 动态注入到 :root
+ * 主题配置文件位于 src/themes/presets/
+ * 
+ * 可用主题: tech (科技风) | material (MUI) | antd (Ant Design)
+ */
 :root {
-  --background: oklch(0.98 0.01 250);
-  --foreground: oklch(0.15 0.02 260);
-
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.15 0.02 260);
-
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0.02 260);
-
-  --primary: oklch(0.55 0.2 200);
-  --primary-foreground: oklch(0.98 0 0);
-
-  --secondary: oklch(0.95 0.01 250);
-  --secondary-foreground: oklch(0.2 0.02 260);
-
-  --muted: oklch(0.95 0.01 250);
-  --muted-foreground: oklch(0.45 0.02 260);
-
-  --accent: oklch(0.92 0.02 250);
-  --accent-foreground: oklch(0.2 0.02 260);
-
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.98 0 0);
-
-  --border: oklch(0.88 0.01 250);
-  --input: oklch(0.88 0.01 250);
-  --ring: oklch(0.55 0.2 200);
-
+  /* 默认使用 tech 主题的暗色作为 fallback */
+  --background: #0a0e14;
+  --foreground: #b3f0ff;
+  --card: rgba(13, 27, 42, 0.8);
+  --card-foreground: #b3f0ff;
+  --popover: rgba(13, 27, 42, 0.95);
+  --popover-foreground: #b3f0ff;
+  --primary: #00d9ff;
+  --primary-foreground: #0a0e14;
+  --secondary: rgba(27, 38, 59, 0.8);
+  --secondary-foreground: #8ecae6;
+  --muted: rgba(27, 38, 59, 0.6);
+  --muted-foreground: #8ecae6;
+  --accent: rgba(0, 217, 255, 0.15);
+  --accent-foreground: #00d9ff;
+  --destructive: #ff3864;
+  --destructive-foreground: #ffffff;
+  --border: rgba(0, 217, 255, 0.2);
+  --input: rgba(27, 38, 59, 0.8);
+  --ring: #00d9ff;
   --radius: 0.5rem;
-
-  /* Sidebar 亮色 */
-  --sidebar: oklch(0.97 0.01 250);
-  --sidebar-foreground: oklch(0.15 0.02 260);
-  --sidebar-primary: oklch(0.55 0.2 200);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.92 0.02 250);
-  --sidebar-accent-foreground: oklch(0.2 0.02 260);
-  --sidebar-border: oklch(0.88 0.01 250);
-  --sidebar-ring: oklch(0.55 0.2 200);
+  --sidebar: rgba(10, 14, 20, 0.95);
+  --sidebar-foreground: #b3f0ff;
+  --sidebar-primary: #00d9ff;
+  --sidebar-primary-foreground: #0a0e14;
+  --sidebar-accent: rgba(0, 217, 255, 0.1);
+  --sidebar-accent-foreground: #00d9ff;
+  --sidebar-border: rgba(0, 217, 255, 0.15);
+  --sidebar-ring: #00d9ff;
 }
 
-/* ============ 暗色主题 ============ */
-.dark {
-  --background: oklch(0.12 0.02 260);
-  --foreground: oklch(0.95 0.01 250);
-
-  --card: oklch(0.14 0.02 260 / 0.6);
-  --card-foreground: oklch(0.95 0.01 250);
-
-  --popover: oklch(0.14 0.03 260 / 0.95);
-  --popover-foreground: oklch(0.95 0.01 250);
-
-  --primary: oklch(0.75 0.15 195);
-  --primary-foreground: oklch(0.1 0.02 260);
-
-  --secondary: oklch(0.2 0.02 260 / 0.6);
-  --secondary-foreground: oklch(0.9 0.01 250);
-
-  --muted: oklch(0.2 0.02 260 / 0.5);
-  --muted-foreground: oklch(0.65 0.02 250);
-
-  --accent: oklch(0.25 0.03 260 / 0.6);
-  --accent-foreground: oklch(0.95 0.01 250);
-
-  --destructive: oklch(0.6 0.2 25);
-  --destructive-foreground: oklch(0.95 0 0);
-
-  --border: oklch(0.35 0.02 260 / 0.3);
-  --input: oklch(0.2 0.02 260 / 0.5);
-  --ring: oklch(0.75 0.15 195);
-
-  --sidebar: oklch(0.1 0.03 260 / 0.8);
-  --sidebar-foreground: oklch(0.95 0.01 250);
-  --sidebar-primary: oklch(0.75 0.15 195);
-  --sidebar-primary-foreground: oklch(0.1 0.02 260);
-  --sidebar-accent: oklch(0.2 0.03 260 / 0.6);
-  --sidebar-accent-foreground: oklch(0.95 0.01 250);
-  --sidebar-border: oklch(0.35 0.02 260 / 0.3);
-  --sidebar-ring: oklch(0.75 0.15 195);
-}
-
+/* Tailwind v4 主题映射 */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -135,35 +92,22 @@
   }
 }
 
+/* 滚动条样式 */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
-/* 亮色模式 */
 ::-webkit-scrollbar-thumb {
-  /* border-radius: 4px; */
-  background: #94a3b8;
+  background: var(--muted-foreground);
+  opacity: 0.5;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
+  opacity: 0.8;
 }
 
 ::-webkit-scrollbar-track {
   border-radius: 4px;
-  background: #e2e8f0;
-}
-
-/* 暗色模式 */
-.dark ::-webkit-scrollbar-thumb {
-  background: #465481;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #5b6a9a;
-}
-
-.dark ::-webkit-scrollbar-track {
-  background: #171d2e;
+  background: var(--muted);
 }

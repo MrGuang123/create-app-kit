@@ -21,10 +21,12 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         this.props.fallback || (
-          <div className="flex h-screen items-center justify-center">
+          <div className="flex h-screen items-center justify-center bg-background">
             <div className="text-center">
-              <h1 className="text-2xl font-bold">出错了</h1>
-              <p className="text-gray-500">
+              <h1 className="text-2xl font-bold text-foreground">
+                出错了
+              </h1>
+              <p className="text-muted-foreground">
                 {this.state.error?.message}
               </p>
             </div>

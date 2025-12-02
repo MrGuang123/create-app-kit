@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useSocket } from "@/hooks/useSocket";
 import { socketManager } from "@/utils/socket";
 
@@ -13,19 +13,23 @@ function LogPanel({
   onClear: () => void;
 }) {
   return (
-    <div className="border rounded-lg overflow-hidden">
-      <div className="flex justify-between items-center px-3 py-2 bg-gray-100 dark:bg-gray-800">
-        <span className="text-sm font-medium">{title}</span>
+    <div className="border border-border rounded-lg overflow-hidden">
+      <div className="flex justify-between items-center px-3 py-2 bg-muted">
+        <span className="text-sm font-medium text-foreground">
+          {title}
+        </span>
         <button
-          className="text-xs text-gray-500 hover:text-gray-700"
+          className="text-xs text-muted-foreground hover:text-foreground"
           onClick={onClear}
         >
           清空
         </button>
       </div>
-      <div className="h-40 overflow-y-auto p-2 bg-gray-900 text-green-400 font-mono text-xs">
+      <div className="h-40 overflow-y-auto p-2 bg-card text-primary font-mono text-xs">
         {logs.length === 0 ? (
-          <span className="text-gray-500">暂无日志...</span>
+          <span className="text-muted-foreground">
+            暂无日志...
+          </span>
         ) : (
           logs.map((log, i) => <div key={i}>{log}</div>)
         )}
@@ -78,7 +82,6 @@ function SocketPanel({
     sendToChannel,
     subscribe,
     subscribeChannel,
-    subscribeChannelType,
     connect,
     disconnect,
   } = useSocket({
@@ -102,7 +105,7 @@ function SocketPanel({
       return;
 
     // 订阅频道消息
-    const unsub = subscribeChannel(channelName, (data) => {
+    subscribeChannel(channelName, (data) => {
       addLog(`📢 [${channelName}] ${JSON.stringify(data)}`);
     });
 
@@ -147,23 +150,25 @@ function SocketPanel({
   };
 
   return (
-    <div className="border rounded-lg p-4 space-y-4 bg-white dark:bg-gray-900">
+    <div className="border border-border rounded-lg p-4 space-y-4 bg-card">
       {/* 头部 */}
       <div className="flex justify-between items-center">
-        <h3 className="font-bold text-lg">连接 #{id}</h3>
+        <h3 className="font-bold text-lg text-foreground">
+          连接 #{id}
+        </h3>
         <div className="flex items-center gap-2">
           <span
             className={`px-2 py-1 text-xs rounded ${
               isConnected
-                ? "bg-green-100 text-green-700"
-                : "bg-gray-100 text-gray-500"
+                ? "bg-primary/20 text-primary"
+                : "bg-muted text-muted-foreground"
             }`}
           >
             {status}
           </span>
           {onRemove && (
             <button
-              className="text-red-500 hover:text-red-700 text-sm"
+              className="text-destructive hover:text-destructive/80 text-sm"
               onClick={() => {
                 disconnect();
                 socketManager.remove(id);
@@ -179,7 +184,7 @@ function SocketPanel({
       {/* URL 和连接控制 */}
       <div className="space-y-2">
         <input
-          className="w-full p-2 border rounded text-sm"
+          className="w-full p-2 border border-input rounded text-sm bg-background text-foreground"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="WebSocket URL"
@@ -187,14 +192,14 @@ function SocketPanel({
         />
         <div className="flex gap-2">
           <button
-            className="px-3 py-1.5 bg-green-500 text-white rounded text-sm disabled:opacity-50"
+            className="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm disabled:opacity-50"
             onClick={connect}
             disabled={isConnected}
           >
             连接
           </button>
           <button
-            className="px-3 py-1.5 bg-red-500 text-white rounded text-sm disabled:opacity-50"
+            className="px-3 py-1.5 bg-destructive text-destructive-foreground rounded text-sm disabled:opacity-50"
             onClick={disconnect}
             disabled={!isConnected}
           >
@@ -205,18 +210,18 @@ function SocketPanel({
 
       {/* 发送普通消息 */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">
+        <label className="text-sm font-medium text-foreground">
           发送消息
         </label>
         <div className="flex gap-2">
           <input
-            className="flex-1 p-2 border rounded text-sm"
+            className="flex-1 p-2 border border-input rounded text-sm bg-background text-foreground"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder='{"type":"test"}'
           />
           <button
-            className="px-3 py-1.5 bg-blue-500 text-white rounded text-sm disabled:opacity-50"
+            className="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm disabled:opacity-50"
             onClick={() => {
               try {
                 const data = JSON.parse(message);
@@ -234,19 +239,19 @@ function SocketPanel({
       </div>
 
       {/* 频道管理 */}
-      <div className="space-y-2 p-3 bg-gray-50 dark:bg-gray-800 rounded">
-        <label className="text-sm font-medium">
+      <div className="space-y-2 p-3 bg-muted rounded">
+        <label className="text-sm font-medium text-foreground">
           📢 频道管理
         </label>
         <div className="flex gap-2">
           <input
-            className="flex-1 p-2 border rounded text-sm"
+            className="flex-1 p-2 border border-input rounded text-sm bg-background text-foreground"
             value={channelName}
             onChange={(e) => setChannelName(e.target.value)}
             placeholder="频道名称"
           />
           <button
-            className="px-3 py-1.5 bg-purple-500 text-white rounded text-sm disabled:opacity-50"
+            className="px-3 py-1.5 bg-secondary text-secondary-foreground rounded text-sm disabled:opacity-50"
             onClick={handleJoinChannel}
             disabled={!isConnected}
           >
@@ -257,19 +262,19 @@ function SocketPanel({
         {/* 已加入的频道 */}
         {joinedChannels.length > 0 && (
           <div className="space-y-2">
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-muted-foreground">
               已加入的频道：
             </div>
             {joinedChannels.map((ch) => (
               <div
                 key={ch}
-                className="flex items-center gap-2 p-2 bg-white dark:bg-gray-700 rounded"
+                className="flex items-center gap-2 p-2 bg-card rounded"
               >
-                <span className="flex-1 text-sm font-medium">
+                <span className="flex-1 text-sm font-medium text-foreground">
                   {ch}
                 </span>
                 <input
-                  className="flex-1 p-1 border rounded text-xs"
+                  className="flex-1 p-1 border border-input rounded text-xs bg-background text-foreground"
                   placeholder="消息内容"
                   value={channelMessage}
                   onChange={(e) =>
@@ -277,13 +282,13 @@ function SocketPanel({
                   }
                 />
                 <button
-                  className="px-2 py-1 bg-blue-500 text-white rounded text-xs"
+                  className="px-2 py-1 bg-primary text-primary-foreground rounded text-xs"
                   onClick={() => handleSendToChannel(ch)}
                 >
                   发送
                 </button>
                 <button
-                  className="px-2 py-1 bg-gray-500 text-white rounded text-xs"
+                  className="px-2 py-1 bg-secondary text-secondary-foreground rounded text-xs"
                   onClick={() => handleLeaveChannel(ch)}
                 >
                   离开
@@ -295,13 +300,13 @@ function SocketPanel({
       </div>
 
       {/* 类型订阅 */}
-      <div className="space-y-2 p-3 bg-gray-50 dark:bg-gray-800 rounded">
-        <label className="text-sm font-medium">
+      <div className="space-y-2 p-3 bg-muted rounded">
+        <label className="text-sm font-medium text-foreground">
           🏷️ 按类型订阅
         </label>
         <div className="flex gap-2">
           <input
-            className="flex-1 p-2 border rounded text-sm"
+            className="flex-1 p-2 border border-input rounded text-sm bg-background text-foreground"
             value={subscribeType}
             onChange={(e) =>
               setSubscribeType(e.target.value)
@@ -309,7 +314,7 @@ function SocketPanel({
             placeholder="消息类型 (如: chat, notification)"
           />
           <button
-            className="px-3 py-1.5 bg-orange-500 text-white rounded text-sm disabled:opacity-50"
+            className="px-3 py-1.5 bg-accent text-accent-foreground rounded text-sm disabled:opacity-50"
             onClick={handleSubscribeType}
             disabled={!isConnected}
           >
@@ -321,7 +326,7 @@ function SocketPanel({
             {subscribedTypes.map((t) => (
               <span
                 key={t}
-                className="px-2 py-0.5 bg-orange-100 text-orange-700 rounded text-xs"
+                className="px-2 py-0.5 bg-primary/20 text-primary rounded text-xs"
               >
                 {t}
               </span>
@@ -360,15 +365,15 @@ export default function SocketTestPage() {
       {/* 页面标题 */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-2xl font-bold text-foreground">
             🔌 WebSocket 测试中心
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             测试所有 Socket 功能：多连接、频道、消息订阅
           </p>
         </div>
         <button
-          className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600"
+          className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90"
           onClick={addConnection}
         >
           + 新增连接
@@ -376,11 +381,11 @@ export default function SocketTestPage() {
       </div>
 
       {/* 功能说明 */}
-      <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-sm">
-        <h3 className="font-medium mb-2">
+      <div className="p-4 bg-primary/10 rounded-lg text-sm">
+        <h3 className="font-medium mb-2 text-foreground">
           📋 测试功能列表
         </h3>
-        <ul className="space-y-1 text-gray-600 dark:text-gray-300">
+        <ul className="space-y-1 text-muted-foreground">
           <li>✅ 基本连接/断开</li>
           <li>✅ 发送 JSON 消息</li>
           <li>✅ 多个独立 Socket 连接</li>
@@ -393,23 +398,25 @@ export default function SocketTestPage() {
       </div>
 
       {/* 测试用服务器说明 */}
-      <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg text-sm">
-        <h3 className="font-medium mb-2">🌐 测试服务器</h3>
-        <ul className="space-y-1 text-gray-600 dark:text-gray-300">
+      <div className="p-4 bg-accent rounded-lg text-sm">
+        <h3 className="font-medium mb-2 text-foreground">
+          🌐 测试服务器
+        </h3>
+        <ul className="space-y-1 text-muted-foreground">
           <li>
-            <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">
+            <code className="bg-muted px-1 rounded text-foreground">
               wss://ws.postman-echo.com/raw
             </code>{" "}
             - Echo 服务器（回显消息）
           </li>
           <li>
-            <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">
+            <code className="bg-muted px-1 rounded text-foreground">
               wss://echo.websocket.org
             </code>{" "}
             - 备用 Echo 服务器
           </li>
           <li>
-            <code className="bg-gray-200 dark:bg-gray-700 px-1 rounded">
+            <code className="bg-muted px-1 rounded text-foreground">
               ws://localhost:8080
             </code>{" "}
             - 本地测试服务器
@@ -433,27 +440,27 @@ export default function SocketTestPage() {
       </div>
 
       {/* 快捷测试消息 */}
-      <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-        <h3 className="font-medium mb-2">
+      <div className="p-4 bg-muted rounded-lg">
+        <h3 className="font-medium mb-2 text-foreground">
           📝 测试消息模板
         </h3>
         <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3 text-xs">
-          <code className="p-2 bg-gray-900 text-green-400 rounded">
+          <code className="p-2 bg-card text-primary rounded border border-border">
             {`{"type":"chat","msg":"hello"}`}
           </code>
-          <code className="p-2 bg-gray-900 text-green-400 rounded">
+          <code className="p-2 bg-card text-primary rounded border border-border">
             {`{"type":"subscribe","channel":"room-1"}`}
           </code>
-          <code className="p-2 bg-gray-900 text-green-400 rounded">
+          <code className="p-2 bg-card text-primary rounded border border-border">
             {`{"channel":"room-1","type":"message","data":"hi"}`}
           </code>
-          <code className="p-2 bg-gray-900 text-green-400 rounded">
+          <code className="p-2 bg-card text-primary rounded border border-border">
             {`{"type":"notification","title":"New"}`}
           </code>
-          <code className="p-2 bg-gray-900 text-green-400 rounded">
+          <code className="p-2 bg-card text-primary rounded border border-border">
             {`{"type":"ping"}`}
           </code>
-          <code className="p-2 bg-gray-900 text-green-400 rounded">
+          <code className="p-2 bg-card text-primary rounded border border-border">
             {`{"type":"unsubscribe","channel":"room-1"}`}
           </code>
         </div>

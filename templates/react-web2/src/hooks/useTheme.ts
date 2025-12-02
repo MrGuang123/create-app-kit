@@ -1,48 +1,54 @@
-import { useEffect, useState } from "react";
-import { useAppStore, type Theme } from "@/stores/appStore";
-
-const applyThemeToDOM = (theme: Theme) => {
-  const root = document.documentElement;
-
-  if (theme === "system") {
-    const systemDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    root.classList.toggle("dark", systemDark);
-  } else {
-    root.classList.toggle("dark", theme === "dark");
-  }
-};
+import { useEffect } from "react";
+import { useAppStore } from "@/stores/appStore";
+import {
+  applyTheme,
+  getActualMode,
+  themePresetList,
+  type ThemeMode,
+  type ThemePreset,
+} from "@/themes";
 
 export function useTheme() {
-  const theme = useAppStore((state) => state.theme);
-  const _setTheme = useAppStore((state) => state.setTheme);
+  const themeMode = useAppStore((state) => state.themeMode);
+  const themePreset = useAppStore(
+    (state) => state.themePreset
+  );
+  const setThemeMode = useAppStore(
+    (state) => state.setThemeMode
+  );
+  const setThemePreset = useAppStore(
+    (state) => state.setThemePreset
+  );
 
+  // 应用主题
   useEffect(() => {
-    applyThemeToDOM(theme);
-  }, [theme]);
+    applyTheme(themePreset, themeMode);
+  }, [themeMode, themePreset]);
 
+  // 监听系统主题变化
   useEffect(() => {
-    // 监听系统主题变化
-    if (theme === "system") {
+    if (themeMode === "system") {
       const mediaQuery = window.matchMedia(
         "(prefers-color-scheme: dark)"
       );
-      const handler = (e: MediaQueryListEvent) => {
-        document.documentElement.classList.toggle(
-          "dark",
-          e.matches
-        );
+      const handler = () => {
+        applyTheme(themePreset, themeMode);
       };
       mediaQuery.addEventListener("change", handler);
       return () =>
         mediaQuery.removeEventListener("change", handler);
     }
-  }, [theme]);
+  }, [themeMode, themePreset]);
 
-  const setTheme = (newTheme: Theme) => {
-    _setTheme(newTheme);
+  return {
+    // 当前状态
+    mode: themeMode,
+    preset: themePreset,
+    actualMode: getActualMode(themeMode),
+    // 可用选项
+    presets: themePresetList,
+    // 设置方法
+    setMode: setThemeMode,
+    setPreset: setThemePreset,
   };
-
-  return { theme, setTheme };
 }

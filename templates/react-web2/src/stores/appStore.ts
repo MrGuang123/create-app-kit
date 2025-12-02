@@ -1,6 +1,6 @@
 import { createStore } from "@/utils/createStore";
+import type { ThemeMode, ThemePreset } from "@/themes";
 
-export type Theme = "light" | "dark" | "system";
 export type LanguageCode = "zh-CN" | "en-US";
 
 export const languages = [
@@ -9,12 +9,14 @@ export const languages = [
 ] as const;
 
 type AppState = {
-  theme: Theme;
+  themeMode: ThemeMode;
+  themePreset: ThemePreset;
   language: LanguageCode;
 };
 
 type AppActions = {
-  setTheme: (theme: Theme) => void;
+  setThemeMode: (mode: ThemeMode) => void;
+  setThemePreset: (preset: ThemePreset) => void;
   setLanguage: (language: LanguageCode) => void;
 };
 
@@ -23,15 +25,24 @@ export const useAppStore = createStore<
   AppActions
 >(
   (set) => ({
-    theme: "dark",
+    themeMode: "system",
+    themePreset: "tech",
     language: "zh-CN",
-    setTheme: (theme) =>
+    setThemeMode: (mode) =>
       set(
         (state) => {
-          state.theme = theme;
+          state.themeMode = mode;
         },
         false,
-        `setTheme/${theme}`
+        `setThemeMode/${mode}`
+      ),
+    setThemePreset: (preset) =>
+      set(
+        (state) => {
+          state.themePreset = preset;
+        },
+        false,
+        `setThemePreset/${preset}`
       ),
     setLanguage: (language) =>
       set(
@@ -46,7 +57,8 @@ export const useAppStore = createStore<
     name: "app-store",
     persistOptions: {
       partialize: (state) => ({
-        theme: state.theme,
+        themeMode: state.themeMode,
+        themePreset: state.themePreset,
         language: state.language,
       }),
     },

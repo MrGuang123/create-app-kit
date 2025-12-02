@@ -28,7 +28,7 @@ const StudyList = memo(() => {
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       <button
         onClick={() => setCount((c) => c + 1)}
-        className="mb-4 px-4 py-2 bg-blue-500 rounded"
+        className="mb-4 px-4 py-2 bg-primary text-primary-foreground rounded"
       >
         Force Re-render ({count}) {subTitle}
       </button>
@@ -43,39 +43,39 @@ const StudyList = memo(() => {
       {courses.map((course) => (
         <div
           key={course.title}
-          className="flex flex-col gap-3 p-4 rounded-lg bg-white/5 ring-1 ring-white/5"
+          className="flex flex-col gap-3 p-4 rounded-lg bg-card ring-1 ring-border"
         >
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-sm text-slate-300">
+              <p className="text-sm text-muted-foreground">
                 {course.tag}
               </p>
-              <h3 className="text-lg font-semibold text-white">
+              <h3 className="text-lg font-semibold text-foreground">
                 {course.title}
               </h3>
             </div>
-            <span className="px-3 py-1 text-xs rounded-full bg-white/10 text-white/80">
+            <span className="px-3 py-1 text-xs rounded-full bg-secondary text-secondary-foreground">
               {course.level}
             </span>
           </div>
           <div>
-            <div className="flex items-center justify-between mb-1 text-xs text-slate-300">
+            <div className="flex items-center justify-between mb-1 text-xs text-muted-foreground">
               <span>进度</span>
               <span>{course.progress}%</span>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-white/10">
+            <div className="h-2 overflow-hidden rounded-full bg-muted">
               <div
-                className="h-full rounded-full bg-linear-to-r from-cyan-400 to-blue-500"
+                className="h-full rounded-full bg-primary"
                 style={{ width: `${course.progress}%` }}
               />
             </div>
           </div>
-          <button className="self-start text-sm font-semibold text-cyan-300 hover:text-cyan-200">
+          <button className="self-start text-sm font-semibold text-primary hover:text-primary/80">
             继续学习 →
           </button>
           <button
             data-testid="progress-button"
-            className="self-start text-sm font-semibold text-cyan-300 hover:text-cyan-200"
+            className="self-start text-sm font-semibold text-primary hover:text-primary/80"
             onClick={() => updateProgress(course.id, 5)}
           >
             进度 +5%

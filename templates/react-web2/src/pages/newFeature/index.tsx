@@ -10,15 +10,15 @@ const NewFeature = () => {
       {items.map((item) => (
         <div
           key={item.title}
-          className="rounded-lg bg-white/5 p-4 ring-1 ring-white/5"
+          className="rounded-lg bg-card p-4 ring-1 ring-border"
         >
-          <h3 className="text-lg font-semibold text-white">
+          <h3 className="text-lg font-semibold text-foreground">
             {item.title}
           </h3>
-          <p className="mt-1 text-sm text-slate-300">
+          <p className="mt-1 text-sm text-muted-foreground">
             {item.desc}
           </p>
-          <button className="mt-3 text-sm font-semibold text-cyan-300 hover:text-cyan-200">
+          <button className="mt-3 text-sm font-semibold text-primary hover:text-primary/80">
             查看详情 →
           </button>
         </div>
