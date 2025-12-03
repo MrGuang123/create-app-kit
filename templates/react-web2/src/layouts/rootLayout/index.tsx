@@ -10,6 +10,7 @@ import {
   GitBranch,
   Cpu,
   Zap,
+  Activity,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
@@ -51,6 +52,11 @@ const menu = [
     label: "WebAssembly",
     to: "/wasmDemo",
     icon: Zap,
+  },
+  {
+    label: "Performance Tools",
+    to: "/perfToolsDemo",
+    icon: Activity,
   },
 ];
 

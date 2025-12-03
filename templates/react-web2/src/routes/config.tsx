@@ -6,6 +6,7 @@ import SocketTest from "@/pages/socketTest";
 import GraphQLDemo from "@/pages/graphqlDemo";
 import WorkerDemo from "@/pages/workerDemo";
 import WasmDemo from "@/pages/wasmDemo";
+import PerfToolsDemo from "@/pages/perfToolsDemo";
 import NotFound from "@/pages/notFound";
 
 export const routeConfigs = [
@@ -23,6 +24,7 @@ export const routeConfigs = [
       { path: "graphqlDemo", element: <GraphQLDemo /> },
       { path: "workerDemo", element: <WorkerDemo /> },
       { path: "wasmDemo", element: <WasmDemo /> },
+      { path: "perfToolsDemo", element: <PerfToolsDemo /> },
     ],
   },
   {

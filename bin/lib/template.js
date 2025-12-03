@@ -36,6 +36,11 @@ const OPTIONAL_FEATURE_FILES = {
     "src/pages/wasmDemo",
     "src/types/wasm.d.ts",
   ],
+  perftools: [
+    "src/utils/performanceTool.ts",
+    "src/pages/perfToolsDemo",
+    "src/types/stats.d.ts",
+  ],
 };
 
 /**
@@ -213,9 +218,12 @@ const processOptionalFeatures = async (
   const hasGraphQL = selectedFeatures.includes("graphql");
   const hasWorker = selectedFeatures.includes("worker");
   const hasWasm = selectedFeatures.includes("wasm");
+  const hasPerfTools =
+    selectedFeatures.includes("perftools");
 
   // 如果全部选中，无需处理
-  if (hasGraphQL && hasWorker && hasWasm) return;
+  if (hasGraphQL && hasWorker && hasWasm && hasPerfTools)
+    return;
 
   // 更新路由配置
   const routeConfigPath = path.join(
@@ -260,6 +268,18 @@ const processOptionalFeatures = async (
       );
       routeContent = routeContent.replace(
         /\s*\{ path: "wasmDemo", element: <WasmDemo \/> \},?\n?/,
+        "\n"
+      );
+    }
+
+    if (!hasPerfTools) {
+      // 移除 PerfTools 相关导入和路由
+      routeContent = routeContent.replace(
+        /import PerfToolsDemo from "@\/pages\/perfToolsDemo";\n/,
+        ""
+      );
+      routeContent = routeContent.replace(
+        /\s*\{ path: "perfToolsDemo", element: <PerfToolsDemo \/> \},?\n?/,
         "\n"
       );
     }
@@ -314,6 +334,18 @@ const processOptionalFeatures = async (
       );
     }
 
+    if (!hasPerfTools) {
+      // 移除 PerfTools 菜单项和图标导入
+      layoutContent = layoutContent.replace(
+        /,\n\s*Activity/,
+        ""
+      );
+      layoutContent = layoutContent.replace(
+        /\s*\{\n\s*label: "Performance Tools",\n\s*to: "\/perfToolsDemo",\n\s*icon: Activity,\n\s*\},?\n?/,
+        "\n"
+      );
+    }
+
     await fse.writeFile(layoutPath, layoutContent);
   }
 
@@ -333,6 +365,12 @@ const processOptionalFeatures = async (
     if (!hasWasm) {
       delete pkg.scripts["wasm:build"];
       delete pkg.scripts["wasm:build:dev"];
+    }
+
+    // 移除 PerfTools 相关依赖
+    if (!hasPerfTools) {
+      delete pkg.devDependencies?.["stats.js"];
+      delete pkg.devDependencies?.["react-scan"];
     }
 
     await fse.writeFile(
@@ -363,6 +401,63 @@ const processOptionalFeatures = async (
         ""
       );
       await fse.writeFile(mocksIndexPath, mocksContent);
+    }
+  }
+
+  // 更新 index.tsx（移除 devtools 导入）
+  if (!hasPerfTools) {
+    const indexPath = path.join(targetDir, "src/index.tsx");
+    if (fs.existsSync(indexPath)) {
+      let indexContent = await fse.readFile(
+        indexPath,
+        "utf8"
+      );
+      // 移除 performanceTool 导入
+      indexContent = indexContent.replace(
+        /\/\/ 性能监控工具（必须在 React 之前导入）\nimport "@\/utils\/performanceTool";\n/,
+        ""
+      );
+      await fse.writeFile(indexPath, indexContent);
+    }
+
+    // 更新 build/config.js（移除 enablePerfTools 配置）
+    const configPath = path.join(
+      targetDir,
+      "build/config.js"
+    );
+    if (fs.existsSync(configPath)) {
+      let configContent = await fse.readFile(
+        configPath,
+        "utf8"
+      );
+      // 移除开发环境的 enablePerfTools
+      configContent = configContent.replace(
+        /\s*\/\/ 是否开启性能监控工具（Stats\.js \+ React Scan \+ React Grab）\n\s*enablePerfTools: true,\n/,
+        "\n"
+      );
+      // 移除生产环境的 enablePerfTools
+      configContent = configContent.replace(
+        /\s*\/\/ 是否开启性能监控工具（生产环境关闭）\n\s*enablePerfTools: false,\n/,
+        "\n"
+      );
+      await fse.writeFile(configPath, configContent);
+    }
+
+    // 更新 env.d.ts（移除 enablePerfTools 类型）
+    const envDtsPath = path.join(
+      targetDir,
+      "src/types/env.d.ts"
+    );
+    if (fs.existsSync(envDtsPath)) {
+      let envDtsContent = await fse.readFile(
+        envDtsPath,
+        "utf8"
+      );
+      envDtsContent = envDtsContent.replace(
+        /\s*\/\*\* 是否开启性能监控工具（Stats\.js \+ React Scan \+ React Grab） \*\/\n\s*enablePerfTools: boolean;\n/,
+        "\n"
+      );
+      await fse.writeFile(envDtsPath, envDtsContent);
     }
   }
 };

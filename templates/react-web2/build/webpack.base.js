@@ -132,6 +132,7 @@ module.exports = (env = "development") => {
           wsUrl: envConfig.wsUrl,
           baseName: envConfig.baseName,
           enableMock: envConfig.enableMock,
+          enablePerfTools: envConfig.enablePerfTools,
           appTitle: envConfig.appTitle,
         }),
         // 也可以单独定义，方便按需使用

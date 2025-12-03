@@ -151,7 +151,7 @@ const askOptionalFeatures = async (optionalConfig) => {
         title: choice.title,
         value: choice.value,
         description: choice.description,
-        selected: false, // 默认不选
+        selected: choice.selected ?? false, // 支持从配置读取默认选中状态
       })),
       hint: "- 空格切换选择，回车确认",
       instructions: false,

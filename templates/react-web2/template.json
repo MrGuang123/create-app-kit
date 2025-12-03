@@ -20,6 +20,12 @@
       "prompt": "选择需要的可选功能：",
       "choices": [
         {
+          "title": "Performance Tools (性能监控工具)",
+          "value": "perftools",
+          "description": "包含 Stats.js、React Scan、React Grab，支持运行时开关",
+          "selected": true
+        },
+        {
           "title": "GraphQL (graphql-request 示例)",
           "value": "graphql",
           "description": "包含 GraphQL 客户端封装和演示页面，与 TanStack Query 无缝集成"

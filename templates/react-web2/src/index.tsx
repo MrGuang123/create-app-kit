@@ -1,3 +1,5 @@
+// 性能监控工具（必须在 React 之前导入）
+import "@/utils/performanceTool";
 import "./wdyr";
 
 import React from "react";

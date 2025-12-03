@@ -22,6 +22,8 @@ interface AppEnvConfig {
   baseName: string;
   /** 是否开启 Mock */
   enableMock: boolean;
+  /** 是否开启性能监控工具（Stats.js + React Scan + React Grab） */
+  enablePerfTools: boolean;
   /** 应用标题 */
   appTitle: string;
 }

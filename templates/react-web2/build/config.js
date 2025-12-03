@@ -18,6 +18,8 @@ const config = {
     baseName: "/",
     // 是否开启 Mock
     enableMock: true,
+    // 是否开启性能监控工具（Stats.js + React Scan + React Grab）
+    enablePerfTools: true,
     // 开发服务器端口
     devPort: 5173,
     // 其他自定义配置
@@ -38,6 +40,8 @@ const config = {
     baseName: "/",
     // 是否开启 Mock
     enableMock: false,
+    // 是否开启性能监控工具（生产环境关闭）
+    enablePerfTools: false,
     // 其他自定义配置
     appTitle: "React App",
   },
