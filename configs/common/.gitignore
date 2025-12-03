@@ -20,3 +20,8 @@ sourcemaps/
 cypress/videos/
 cypress/screenshots/
 cypress/downloads/
+
+# Rust WASM
+wasm/target      # ← Rust 构建缓存
+src/wasm/pkg     # ← wasm-pack 生成的 JS 绑定
+*.wasm           # ← WASM 二进制文件
