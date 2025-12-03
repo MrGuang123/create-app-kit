@@ -95,8 +95,19 @@ module.exports = (env = "development") => {
             filename: "static/media/[name].[hash:8][ext]",
           },
         },
+        // wasm-pack 生成的 WASM（在 pkg 目录）由其 JS 胶水代码处理，排除掉
         {
           test: /\.wasm$/,
+          include: /pkg/,
+          type: "asset/resource",
+          generator: {
+            filename: "static/wasm/[name].[hash:8][ext]",
+          },
+        },
+        // 其他 WASM 文件使用 webpack 的 asyncWebAssembly
+        {
+          test: /\.wasm$/,
+          exclude: /pkg/,
           type: "webassembly/async",
         },
         {
