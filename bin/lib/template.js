@@ -19,6 +19,12 @@ const SHARED_CONFIG_FILES = [
 
 // 可选功能对应的文件/目录映射
 const OPTIONAL_FEATURE_FILES = {
+  graphql: [
+    "src/utils/graphql.ts",
+    "src/services/graphql",
+    "src/mocks/graphql.ts",
+    "src/pages/graphqlDemo",
+  ],
   worker: [
     "src/workers",
     "src/hooks/useWorker.ts",
@@ -204,11 +210,12 @@ const processOptionalFeatures = async (
   targetDir,
   selectedFeatures
 ) => {
+  const hasGraphQL = selectedFeatures.includes("graphql");
   const hasWorker = selectedFeatures.includes("worker");
   const hasWasm = selectedFeatures.includes("wasm");
 
   // 如果全部选中，无需处理
-  if (hasWorker && hasWasm) return;
+  if (hasGraphQL && hasWorker && hasWasm) return;
 
   // 更新路由配置
   const routeConfigPath = path.join(
@@ -220,6 +227,18 @@ const processOptionalFeatures = async (
       routeConfigPath,
       "utf8"
     );
+
+    if (!hasGraphQL) {
+      // 移除 GraphQL 相关导入和路由
+      routeContent = routeContent.replace(
+        /import GraphQLDemo from "@\/pages\/graphqlDemo";\n/,
+        ""
+      );
+      routeContent = routeContent.replace(
+        /\s*\{ path: "graphqlDemo", element: <GraphQLDemo \/> \},?\n?/,
+        "\n"
+      );
+    }
 
     if (!hasWorker) {
       // 移除 Worker 相关导入和路由
@@ -259,6 +278,18 @@ const processOptionalFeatures = async (
       "utf8"
     );
 
+    if (!hasGraphQL) {
+      // 移除 GraphQL 菜单项和图标导入
+      layoutContent = layoutContent.replace(
+        /,\n\s*GitBranch/,
+        ""
+      );
+      layoutContent = layoutContent.replace(
+        /\s*\{\n\s*label: "GraphQL",\n\s*to: "\/graphqlDemo",\n\s*icon: GitBranch,\n\s*\},?\n?/,
+        "\n"
+      );
+    }
+
     if (!hasWorker) {
       // 移除 Worker 菜单项和图标导入
       layoutContent = layoutContent.replace(
@@ -286,24 +317,52 @@ const processOptionalFeatures = async (
     await fse.writeFile(layoutPath, layoutContent);
   }
 
-  // 更新 package.json（移除 WASM 相关脚本）
-  if (!hasWasm) {
-    const pkgPath = path.join(targetDir, "package.json");
-    if (fs.existsSync(pkgPath)) {
-      const pkgContent = await fse.readFile(
-        pkgPath,
-        "utf8"
-      );
-      const pkg = JSON.parse(pkgContent);
+  // 更新 package.json
+  const pkgPath = path.join(targetDir, "package.json");
+  if (fs.existsSync(pkgPath)) {
+    const pkgContent = await fse.readFile(pkgPath, "utf8");
+    const pkg = JSON.parse(pkgContent);
 
-      // 移除 wasm 相关脚本
+    // 移除 GraphQL 相关依赖
+    if (!hasGraphQL) {
+      delete pkg.dependencies?.["graphql"];
+      delete pkg.dependencies?.["graphql-request"];
+    }
+
+    // 移除 WASM 相关脚本
+    if (!hasWasm) {
       delete pkg.scripts["wasm:build"];
       delete pkg.scripts["wasm:build:dev"];
+    }
 
-      await fse.writeFile(
-        pkgPath,
-        JSON.stringify(pkg, null, 2)
+    await fse.writeFile(
+      pkgPath,
+      JSON.stringify(pkg, null, 2)
+    );
+  }
+
+  // 更新 mocks/index.ts（移除 GraphQL mock 导入）
+  if (!hasGraphQL) {
+    const mocksIndexPath = path.join(
+      targetDir,
+      "src/mocks/index.ts"
+    );
+    if (fs.existsSync(mocksIndexPath)) {
+      let mocksContent = await fse.readFile(
+        mocksIndexPath,
+        "utf8"
       );
+      // 移除 graphql mock 导入
+      mocksContent = mocksContent.replace(
+        /import \{ graphqlMock \} from "\.\/graphql";\n/,
+        ""
+      );
+      // 移除 graphqlMock 的使用
+      mocksContent = mocksContent.replace(
+        /,\s*\.\.\.graphqlMock/,
+        ""
+      );
+      await fse.writeFile(mocksIndexPath, mocksContent);
     }
   }
 };

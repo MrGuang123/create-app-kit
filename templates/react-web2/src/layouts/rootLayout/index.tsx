@@ -7,6 +7,7 @@ import {
   BookOpen,
   Sparkles,
   Terminal,
+  GitBranch,
   Cpu,
   Zap,
 } from "lucide-react";
@@ -35,6 +36,11 @@ const menu = [
     label: "WebSocket 测试",
     to: "/socketTest",
     icon: Terminal,
+  },
+  {
+    label: "GraphQL",
+    to: "/graphqlDemo",
+    icon: GitBranch,
   },
   {
     label: "Web Worker",

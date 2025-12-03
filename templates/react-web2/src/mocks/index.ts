@@ -1,8 +1,12 @@
 import { MockType } from "@/types/request";
 import { coursesMock } from "./courses";
+import { graphqlMock } from "./graphql";
 
 // 汇总所有 mock
-const mockHandlers: MockType[] = [...coursesMock];
+const mockHandlers: MockType[] = [
+  ...coursesMock,
+  ...graphqlMock,
+];
 
 // 匹配并执行 mock
 export async function matchMock(

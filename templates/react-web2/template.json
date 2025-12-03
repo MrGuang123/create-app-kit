@@ -20,6 +20,11 @@
       "prompt": "选择需要的可选功能：",
       "choices": [
         {
+          "title": "GraphQL (graphql-request 示例)",
+          "value": "graphql",
+          "description": "包含 GraphQL 客户端封装和演示页面，与 TanStack Query 无缝集成"
+        },
+        {
           "title": "Web Worker (多线程计算示例)",
           "value": "worker",
           "description": "包含 Web Worker 演示页面和 useWorker Hook"

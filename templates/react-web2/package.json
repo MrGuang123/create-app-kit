@@ -27,6 +27,8 @@
     "@tanstack/react-query-devtools": "^5.91.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "graphql": "^16.9.0",
+    "graphql-request": "^7.1.2",
     "i18next": "^25.6.3",
     "immer": "^11.0.0",
     "ky": "^1.14.0",

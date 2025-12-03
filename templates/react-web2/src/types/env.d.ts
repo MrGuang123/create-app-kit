@@ -14,6 +14,8 @@ interface AppEnvConfig {
   publicPath: string;
   /** API 基础路径 */
   apiPath: string;
+  /** GraphQL 端点路径 */
+  graphqlPath: string;
   /** WebSocket 地址 */
   wsUrl: string;
   /** 路由 basename */

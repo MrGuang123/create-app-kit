@@ -10,6 +10,8 @@ const config = {
     publicPath: "/",
     // API 基础路径
     apiPath: "/api",
+    // GraphQL 端点路径
+    graphqlPath: "/graphql",
     // WebSocket 地址
     wsUrl: "ws://localhost:8080",
     // 路由 basename（用于子路径部署）
@@ -28,6 +30,8 @@ const config = {
     publicPath: "/",
     // API 基础路径
     apiPath: "/api",
+    // GraphQL 端点路径
+    graphqlPath: "/graphql",
     // WebSocket 地址
     wsUrl: "wss://your-production-domain.com/ws",
     // 路由 basename（用于子路径部署，如 /app/）
