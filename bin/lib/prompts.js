@@ -108,22 +108,6 @@ const runPrompts = async (
     initial: availablePMs.indexOf(preferredPM),
   });
 
-  // 4. 是否初始化 Git
-  questions.push({
-    type: "confirm",
-    name: "initGit",
-    message: "是否初始化 Git 仓库？",
-    initial: true,
-  });
-
-  // 5. 是否安装依赖
-  questions.push({
-    type: "confirm",
-    name: "installDeps",
-    message: "是否立即安装依赖？",
-    initial: true,
-  });
-
   return prompts(questions, { onCancel });
 };
 
@@ -152,9 +136,63 @@ const askLinter = async (linterConfig) => {
   return response.linter;
 };
 
+/**
+ * 询问可选功能
+ * @param {Object} optionalConfig - 可选功能配置
+ * @returns {Promise<string[]>} 选中的功能列表
+ */
+const askOptionalFeatures = async (optionalConfig) => {
+  const response = await prompts(
+    {
+      type: "multiselect",
+      name: "features",
+      message: optionalConfig.prompt,
+      choices: optionalConfig.choices.map((choice) => ({
+        title: choice.title,
+        value: choice.value,
+        description: choice.description,
+        selected: false, // 默认不选
+      })),
+      hint: "- 空格切换选择，回车确认",
+      instructions: false,
+    },
+    { onCancel }
+  );
+
+  return response.features || [];
+};
+
+/**
+ * 询问最终选项（Git 初始化和依赖安装）
+ * @returns {Promise<{initGit: boolean, installDeps: boolean}>}
+ */
+const askFinalOptions = async () => {
+  const response = await prompts(
+    [
+      {
+        type: "confirm",
+        name: "initGit",
+        message: "是否初始化 Git 仓库？",
+        initial: true,
+      },
+      {
+        type: "confirm",
+        name: "installDeps",
+        message: "是否立即安装依赖？",
+        initial: true,
+      },
+    ],
+    { onCancel }
+  );
+
+  return response;
+};
+
 module.exports = {
   ensureTargetDir,
   runPrompts,
   askLinter,
+  askOptionalFeatures,
+  askFinalOptions,
   onCancel,
 };

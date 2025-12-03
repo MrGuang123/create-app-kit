@@ -7,24 +7,28 @@ const { execSync } = require("child_process");
  */
 const initGit = async (targetDir) => {
   try {
-    execSync("git init", {
+    // 初始化 git 仓库，并设置默认分支为 master
+    execSync("git init -b master", {
       cwd: targetDir,
       stdio: "ignore",
     });
-    execSync("git add -A", {
-      cwd: targetDir,
-      stdio: "ignore",
-    });
-    execSync(
-      'git commit -m "Initial commit from create-app-kit"',
-      {
-        cwd: targetDir,
-        stdio: "ignore",
-      }
-    );
     return true;
   } catch {
-    return false;
+    // 如果 git 版本不支持 -b 参数，使用传统方式
+    try {
+      execSync("git init", {
+        cwd: targetDir,
+        stdio: "ignore",
+      });
+      // 重命名默认分支为 master
+      execSync("git branch -m master", {
+        cwd: targetDir,
+        stdio: "ignore",
+      });
+      return true;
+    } catch {
+      return false;
+    }
   }
 };
 

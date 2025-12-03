@@ -16,6 +16,7 @@ const { installDependencies } = require("./lib/pm");
 const {
   readTemplates,
   copyTemplate,
+  processOptionalFeatures,
 } = require("./lib/template");
 const { applyLinterConfig } = require("./lib/linter");
 const { applyCommonConfigs } = require("./lib/common");
@@ -24,6 +25,8 @@ const {
   ensureTargetDir,
   runPrompts,
   askLinter,
+  askOptionalFeatures,
+  askFinalOptions,
 } = require("./lib/prompts");
 
 /**
@@ -114,6 +117,17 @@ const main = async () => {
     );
   }
 
+  // 如果模板有可选功能，询问用户
+  let selectedFeatures = [];
+  if (template.features?.optionalFeatures) {
+    selectedFeatures = await askOptionalFeatures(
+      template.features.optionalFeatures
+    );
+  }
+
+  // 最后询问 Git 初始化和依赖安装
+  const finalOptions = await askFinalOptions();
+
   const targetDir = path.resolve(
     process.cwd(),
     projectName
@@ -134,12 +148,33 @@ const main = async () => {
   // 步骤 2: 复制模板
   const copySpinner = ora("正在复制模板文件...").start();
   try {
-    await copyTemplate(template, targetDir, projectName);
+    await copyTemplate(
+      template,
+      targetDir,
+      projectName,
+      selectedFeatures
+    );
     copySpinner.succeed("模板文件复制完成");
   } catch (err) {
     copySpinner.fail("模板文件复制失败");
     console.error(pc.red(err.message));
     process.exit(1);
+  }
+
+  // 步骤 2.5: 处理可选功能（更新路由、布局等）
+  if (template.features?.optionalFeatures) {
+    const featureSpinner =
+      ora("正在配置可选功能...").start();
+    try {
+      await processOptionalFeatures(
+        targetDir,
+        selectedFeatures
+      );
+      featureSpinner.succeed("可选功能配置完成");
+    } catch (err) {
+      featureSpinner.fail("可选功能配置失败");
+      console.error(pc.red(err.message));
+    }
   }
 
   // 步骤 3: 应用公共配置 (.github, .husky, .gitignore 等)
@@ -170,8 +205,8 @@ const main = async () => {
     console.error(pc.red(err.message));
   }
 
-  // 步骤 5: 初始化 Git
-  if (answers.initGit) {
+  // 步骤 5: 初始化 Git（仅当用户明确选择时）
+  if (finalOptions.initGit === true) {
     const gitSpinner = ora(
       "正在初始化 Git 仓库..."
     ).start();
@@ -183,8 +218,8 @@ const main = async () => {
     }
   }
 
-  // 步骤 6: 安装依赖
-  if (answers.installDeps) {
+  // 步骤 6: 安装依赖（仅当用户明确选择安装时）
+  if (finalOptions.installDeps === true) {
     console.log();
     console.log(
       pc.cyan(
@@ -205,12 +240,12 @@ const main = async () => {
   }
 
   // 显示完成提示
-  showSuccess({
+  await showSuccess({
     template,
     relativePath,
     linterChoice,
     packageManager: answers.packageManager,
-    installDeps: answers.installDeps,
+    installDeps: finalOptions.installDeps,
   });
 };
 

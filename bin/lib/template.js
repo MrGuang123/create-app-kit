@@ -17,6 +17,21 @@ const SHARED_CONFIG_FILES = [
   ".vscode",
 ];
 
+// 可选功能对应的文件/目录映射
+const OPTIONAL_FEATURE_FILES = {
+  worker: [
+    "src/workers",
+    "src/hooks/useWorker.ts",
+    "src/pages/workerDemo",
+  ],
+  wasm: [
+    "src/wasm",
+    "wasm",
+    "src/pages/wasmDemo",
+    "src/types/wasm.d.ts",
+  ],
+};
+
 /**
  * 读取所有可用模板
  * @returns {Array} 模板列表
@@ -51,30 +66,73 @@ const readTemplates = () => {
 };
 
 /**
+ * 获取需要排除的文件列表（基于未选择的功能）
+ * @param {string[]} selectedFeatures - 用户选择的功能
+ * @returns {string[]} 需要排除的相对路径列表
+ */
+const getExcludedPaths = (selectedFeatures) => {
+  const excluded = [];
+  for (const [feature, paths] of Object.entries(
+    OPTIONAL_FEATURE_FILES
+  )) {
+    if (!selectedFeatures.includes(feature)) {
+      excluded.push(...paths);
+    }
+  }
+  return excluded;
+};
+
+/**
  * 复制模板到目标目录
  * @param {Object} template - 模板对象
  * @param {string} targetDir - 目标目录
  * @param {string} projectName - 项目名称
+ * @param {string[]} selectedFeatures - 用户选择的可选功能
  */
 const copyTemplate = async (
   template,
   targetDir,
-  projectName
+  projectName,
+  selectedFeatures = []
 ) => {
-  // 需要排除的文件/目录
+  // 需要排除的文件/目录（基础排除）
   const excludeFiles = [
     "template.json",
     "linter-configs",
+    "node_modules",
+    "pnpm-lock.yaml",
+    "yarn.lock",
+    "package-lock.json",
+    "bun.lockb",
     ...SHARED_CONFIG_FILES,
   ];
+
+  // 根据未选择的功能，获取需要排除的路径
+  const excludedPaths = getExcludedPaths(selectedFeatures);
 
   await fse.copy(template.path, targetDir, {
     dereference: true,
     filter: (src) => {
       const basename = path.basename(src);
-      return !excludeFiles.includes(basename);
+      if (excludeFiles.includes(basename)) return false;
+
+      // 检查是否在排除路径中
+      const relativePath = path.relative(
+        template.path,
+        src
+      );
+      for (const excludedPath of excludedPaths) {
+        if (
+          relativePath === excludedPath ||
+          relativePath.startsWith(excludedPath + path.sep)
+        ) {
+          return false;
+        }
+      }
+      return true;
     },
   });
+
   await updatePackageJson(targetDir, projectName, {});
 };
 
@@ -137,9 +195,124 @@ const updatePackageJson = async (
   );
 };
 
+/**
+ * 处理可选功能：更新路由、布局和 package.json
+ * @param {string} targetDir - 目标目录
+ * @param {string[]} selectedFeatures - 用户选择的可选功能
+ */
+const processOptionalFeatures = async (
+  targetDir,
+  selectedFeatures
+) => {
+  const hasWorker = selectedFeatures.includes("worker");
+  const hasWasm = selectedFeatures.includes("wasm");
+
+  // 如果全部选中，无需处理
+  if (hasWorker && hasWasm) return;
+
+  // 更新路由配置
+  const routeConfigPath = path.join(
+    targetDir,
+    "src/routes/config.tsx"
+  );
+  if (fs.existsSync(routeConfigPath)) {
+    let routeContent = await fse.readFile(
+      routeConfigPath,
+      "utf8"
+    );
+
+    if (!hasWorker) {
+      // 移除 Worker 相关导入和路由
+      routeContent = routeContent.replace(
+        /import WorkerDemo from "@\/pages\/workerDemo";\n/,
+        ""
+      );
+      routeContent = routeContent.replace(
+        /\s*\{ path: "workerDemo", element: <WorkerDemo \/> \},?\n?/,
+        "\n"
+      );
+    }
+
+    if (!hasWasm) {
+      // 移除 WASM 相关导入和路由
+      routeContent = routeContent.replace(
+        /import WasmDemo from "@\/pages\/wasmDemo";\n/,
+        ""
+      );
+      routeContent = routeContent.replace(
+        /\s*\{ path: "wasmDemo", element: <WasmDemo \/> \},?\n?/,
+        "\n"
+      );
+    }
+
+    await fse.writeFile(routeConfigPath, routeContent);
+  }
+
+  // 更新布局菜单
+  const layoutPath = path.join(
+    targetDir,
+    "src/layouts/rootLayout/index.tsx"
+  );
+  if (fs.existsSync(layoutPath)) {
+    let layoutContent = await fse.readFile(
+      layoutPath,
+      "utf8"
+    );
+
+    if (!hasWorker) {
+      // 移除 Worker 菜单项和图标导入
+      layoutContent = layoutContent.replace(
+        /,\n\s*Cpu/,
+        ""
+      );
+      layoutContent = layoutContent.replace(
+        /\s*\{\n\s*label: "Web Worker",\n\s*to: "\/workerDemo",\n\s*icon: Cpu,\n\s*\},?\n?/,
+        "\n"
+      );
+    }
+
+    if (!hasWasm) {
+      // 移除 WASM 菜单项和图标导入
+      layoutContent = layoutContent.replace(
+        /,\n\s*Zap/,
+        ""
+      );
+      layoutContent = layoutContent.replace(
+        /\s*\{\n\s*label: "WebAssembly",\n\s*to: "\/wasmDemo",\n\s*icon: Zap,\n\s*\},?\n?/,
+        "\n"
+      );
+    }
+
+    await fse.writeFile(layoutPath, layoutContent);
+  }
+
+  // 更新 package.json（移除 WASM 相关脚本）
+  if (!hasWasm) {
+    const pkgPath = path.join(targetDir, "package.json");
+    if (fs.existsSync(pkgPath)) {
+      const pkgContent = await fse.readFile(
+        pkgPath,
+        "utf8"
+      );
+      const pkg = JSON.parse(pkgContent);
+
+      // 移除 wasm 相关脚本
+      delete pkg.scripts["wasm:build"];
+      delete pkg.scripts["wasm:build:dev"];
+
+      await fse.writeFile(
+        pkgPath,
+        JSON.stringify(pkg, null, 2)
+      );
+    }
+  }
+};
+
 module.exports = {
   readTemplates,
   copyTemplate,
   copyCommonConfigs,
   updatePackageJson,
+  processOptionalFeatures,
+  OPTIONAL_FEATURE_FILES,
 };

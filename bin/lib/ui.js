@@ -37,50 +37,71 @@ const formatTemplateList = (templates) =>
     .join("\n");
 
 /**
- * 显示完成提示
+ * 显示完成提示（带庆祝动画）
  * @param {Object} options
  */
-const showSuccess = ({
+const showSuccess = async ({
   template,
   relativePath,
   linterChoice,
   packageManager,
   installDeps,
 }) => {
-  console.log();
-  console.log(pc.green("━".repeat(50)));
-  console.log();
-  console.log(pc.bold(pc.green(`🎉 项目创建成功！`)));
-  console.log();
-  console.log(pc.dim("  模板: ") + pc.cyan(template.title));
-  console.log(pc.dim("  路径: ") + pc.cyan(relativePath));
-  console.log(
-    pc.dim("  规范: ") +
-      pc.cyan(
-        linterChoice === "biome"
-          ? "Biome"
-          : "ESLint + Prettier"
-      )
-  );
-  console.log();
-  console.log(pc.bold("📝 下一步："));
+  // 渐变色分隔线
+  const divider = "━".repeat(50);
+  console.log(gradient.rainbow(divider));
   console.log();
 
+  // 彩虹动画标题
+  console.log(gradient.rainbow("  ✨ 项目创建成功！ ✨"));
+  console.log();
+
+  // 项目信息（带样式）
+  const infoBox = `
+  ┌─────────────────────────────────────────────┐
+  │  ${pc.dim("模板:")} ${pc.cyan(
+    template.title.padEnd(33)
+  )}│
+  │  ${pc.dim("路径:")} ${pc.cyan(relativePath.padEnd(33))}│
+  │  ${pc.dim("规范:")} ${pc.cyan(
+    (linterChoice === "biome"
+      ? "Biome"
+      : "ESLint + Prettier"
+    ).padEnd(33)
+  )}│
+  └─────────────────────────────────────────────┘`;
+  console.log(pc.white(infoBox));
+  console.log();
+
+  // 下一步指引
+  console.log(gradient.cristal("  📝 下一步："));
+  console.log();
+
+  const commands = [];
   if (relativePath !== ".") {
-    console.log(pc.white(`  cd ${relativePath}`));
+    commands.push(`cd ${relativePath}`);
   }
   if (!installDeps) {
-    console.log(pc.white(`  ${packageManager} install`));
+    commands.push(`${packageManager} install`);
   }
-  console.log(
-    pc.white(
-      `  ${packageManager}${
-        packageManager === "npm" ? " run" : ""
-      } dev`
-    )
+  commands.push(
+    `${packageManager}${
+      packageManager === "npm" ? " run" : ""
+    } dev`
   );
+
+  commands.forEach((cmd, i) => {
+    const prefix =
+      i === commands.length - 1 ? "  └─▶" : "  ├─▶";
+    console.log(
+      pc.dim(prefix) + " " + pc.bold(pc.cyan(cmd))
+    );
+  });
+
   console.log();
-  console.log(pc.dim("  Happy coding! 🚀"));
+  console.log(
+    gradient.pastel("  ✨ Happy coding! 祝你编码愉快！ 🚀")
+  );
   console.log();
 };
 

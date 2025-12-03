@@ -15,6 +15,21 @@
         }
       ],
       "default": "biome"
+    },
+    "optionalFeatures": {
+      "prompt": "选择需要的可选功能：",
+      "choices": [
+        {
+          "title": "Web Worker (多线程计算示例)",
+          "value": "worker",
+          "description": "包含 Web Worker 演示页面和 useWorker Hook"
+        },
+        {
+          "title": "WebAssembly (Rust WASM 示例)",
+          "value": "wasm",
+          "description": "包含 Rust 编译的 WASM 模块和演示页面"
+        }
+      ]
     }
   }
 }
