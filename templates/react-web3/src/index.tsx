@@ -1,21 +1,23 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App';
-import './styles.css';
-import { AppProviders } from './providers';
+// 性能监控工具（必须在 React 之前导入）
+import "@/utils/performanceTool";
+import "./wdyr";
 
-const container = document.getElementById('root');
+import React from "react";
+import { createRoot } from "react-dom/client";
+import "./styles.css";
+import "./locales";
+import App from "./App";
+
+const container = document.getElementById("root");
 
 if (!container) {
-  throw new Error('Root element #root not found');
+  throw new Error("Root element #root not found");
 }
 
 const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <AppProviders>
-      <App />
-    </AppProviders>
-  </React.StrictMode>,
+    <App />
+  </React.StrictMode>
 );

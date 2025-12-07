@@ -1,4 +1,46 @@
 {
   "title": "React Web3 模板",
-  "description": "React 19 + wagmi + viem + React Query 的 Web3 前端模板，含钱包连接与网络切换示例。"
+  "description": "React 19 + TypeScript + Webpack 的 Web3 通用模板，适配 REST/GraphQL 接口。",
+  "features": {
+    "linter": {
+      "prompt": "选择代码规范工具：",
+      "choices": [
+        {
+          "title": "Biome (更快，all-in-one)",
+          "value": "biome"
+        },
+        {
+          "title": "ESLint + Prettier (传统方案)",
+          "value": "eslint"
+        }
+      ],
+      "default": "biome"
+    },
+    "optionalFeatures": {
+      "prompt": "选择需要的可选功能：",
+      "choices": [
+        {
+          "title": "Performance Tools (性能监控工具)",
+          "value": "perftools",
+          "description": "包含 Stats.js、React Scan、React Grab，支持运行时开关",
+          "selected": true
+        },
+        {
+          "title": "GraphQL (graphql-request 示例)",
+          "value": "graphql",
+          "description": "包含 GraphQL 客户端封装和演示页面，与 TanStack Query 无缝集成"
+        },
+        {
+          "title": "Web Worker (多线程计算示例)",
+          "value": "worker",
+          "description": "包含 Web Worker 演示页面和 useWorker Hook"
+        },
+        {
+          "title": "WebAssembly (Rust WASM 示例)",
+          "value": "wasm",
+          "description": "包含 Rust 编译的 WASM 模块和演示页面"
+        }
+      ]
+    }
+  }
 }

@@ -1,0 +1,17 @@
+{
+  "name": "compute-wasm",
+  "type": "module",
+  "description": "WebAssembly compute module for React app",
+  "version": "0.1.0",
+  "license": "MIT",
+  "files": [
+    "compute_wasm_bg.wasm",
+    "compute_wasm.js",
+    "compute_wasm.d.ts"
+  ],
+  "main": "compute_wasm.js",
+  "types": "compute_wasm.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
